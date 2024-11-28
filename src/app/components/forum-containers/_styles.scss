@@ -1,0 +1,162 @@
+@use 'sass:map' as *;
+@use '../../styles/mixins.scss' as *;
+@use '../../styles/variables.module.scss' as *;
+
+.main-cont-input {
+  $margin: map-get($map: $css-props, $key: 'margin');
+  width: calc(100% - (4 * $margin));
+  height: auto;
+  margin: $margin;
+  background-color: map-get($map: $project-colors, $key: 'bgAccent');
+  border-radius: $margin;
+  padding: calc(map-get($map: $css-props, $key: 'padding') * 2);
+  padding-block: calc($margin * 4);
+
+  h3 {
+    margin-bottom: calc($margin * 2);
+  }
+
+  .text-field {
+    width: 70%;
+
+    @media screen and (max-width: 768px) {
+      width: 100%;
+    }
+  }
+}
+
+.main-cont-class-select {
+  $margin: map-get($map: $css-props, $key: 'margin');
+  width: calc(100% - (4 * $margin));
+  min-height: 380px;
+  height: auto;
+  margin: $margin;
+  background-color: map-get($map: $project-colors, $key: 'bgAccent');
+  border-radius: $margin;
+  padding: calc(map-get($map: $css-props, $key: 'padding') * 2);
+  padding-block: calc($margin * 4);
+
+  h3 {
+    margin-bottom: calc($margin * 2);
+  }
+
+  .div-select-class {
+    position: relative;
+    @include centerFlex();
+    justify-content: space-between;
+    min-height: 260px;
+
+    #left-side {
+      @include centerFlex(column);
+      align-items: flex-start;
+      justify-content: flex-start;
+      height: 100%;
+      width: 50%;
+      margin-left: calc($margin * 2);
+    }
+
+    #right-side {
+      @include centerFlex(column);
+      align-items: flex-start;
+      width: 50%;
+      height: 100%;
+      margin-left: calc($margin * 2);
+    }
+  }
+}
+
+.main-cont-text-container {
+  position: relative;
+  $margin: map-get($map: $css-props, $key: 'margin');
+  width: calc(100% - (4 * $margin));
+  height: auto;
+  margin: $margin;
+  background-color: map-get($map: $project-colors, $key: 'bgAccent');
+  border-radius: $margin;
+  padding: calc(map-get($map: $css-props, $key: 'padding') * 2);
+  padding-block: calc($margin * 4);
+
+  h1 {
+    margin-bottom: calc($margin * 2);
+  }
+
+  img {
+    position: absolute;
+    top: calc($margin * 2);
+    right: calc($margin * 2);
+  }
+}
+
+.main-cont-hoodie-select {
+  $margin: map-get($map: $css-props, $key: 'margin');
+  width: calc(100% - (4 * $margin));
+  height: auto;
+  margin: $margin;
+  background-color: map-get($map: $project-colors, $key: 'bgAccent');
+  border-radius: $margin;
+  padding: calc(map-get($map: $css-props, $key: 'padding') * 2);
+  padding-block: calc($margin * 4);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: $margin * 2;
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+  }
+
+  #left-side {
+    width: auto;
+    height: auto;
+
+    img {
+      width: 35dvh;
+      height: 50dvh;
+      object-fit: cover;
+      border-radius: $margin;
+    }
+  }
+
+  #right-side {
+    position: relative;
+
+    &[use-img="true"] {
+      width: -webkit-fill-available;
+      height: auto;
+    }
+    &[use-img="false"] {
+      width: 100%;
+      height: auto;
+      display: flex;
+      gap: 40px;
+
+      @media screen and (max-width: 768px) {
+        flex-direction: column;
+      }
+    }
+
+    h3 {
+      margin-block: $margin;
+      margin-inline: 0;
+    }
+
+    .submit-btn {
+      position: absolute;
+      top: calc(($margin * 2) * -1);
+      right: $margin;
+      width: 60px;
+      height: 60px;
+      border-radius: 20px;
+      margin-block: $margin;
+    }
+  }
+}
+
+#vertical-separator {
+  position: absolute;
+  height: 95%;
+  width: 1px;
+  background-color: map-get($map: $project-colors, $key: 'fontColor');
+  top: 0;
+  left: 50%;
+}

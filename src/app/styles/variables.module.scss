@@ -1,0 +1,27 @@
+$project-colors: (
+  'fontColor': light-dark(#171717, #ededed),
+  'fontSize': 16px,
+
+  'bgColor': light-dark(#ffffff, #0a0a0a),
+  'bgColorOpp': light-dark(#0a0a0a, #ffffff),
+  'bgAccent': light-dark(#d9d9d9, #282828),
+
+  'primaryColor': #004cff,
+  'secondaryColor': #0003ad,
+  'accentColor': #ff0000,
+);
+
+$css-props: (
+  'margin': 10px,
+  'padding': 10px
+);
+
+:export {
+  @each $key, $value in $project-colors {
+    #{unquote($key)}: #{$value};
+  }
+
+  @each $key, $value in $css-props {
+    #{unquote($key)}: $value;
+  }
+}
