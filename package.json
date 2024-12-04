@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "set NODE_OPTIONS=--no-warnings && next build",
+    "export": "next build && next export",
     "start": "next start",
     "lint": "next lint"
   },
@@ -23,5 +24,8 @@
     "recharts": "^2.13.3",
     "sass": "^1.81.0",
     "scss": "^0.2.4"
+  },
+  "devDependencies": {
+    "typescript": "5.7.2"
   }
 }

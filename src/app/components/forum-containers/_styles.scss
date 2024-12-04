@@ -53,6 +53,11 @@
       height: 100%;
       width: 50%;
       margin-left: calc($margin * 2);
+
+      @media screen and (max-width: 768px) {
+        width: 80%;
+        margin-left: 0;
+      }
     }
 
     #right-side {
@@ -61,6 +66,11 @@
       width: 50%;
       height: 100%;
       margin-left: calc($margin * 2);
+
+      @media screen and (max-width: 768px) {
+        width: 20%;
+        margin-left: 0;
+      }
     }
   }
 }
@@ -98,7 +108,7 @@
   padding-block: calc($margin * 4);
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: $margin * 2;
 
   @media screen and (max-width: 768px) {
@@ -106,38 +116,58 @@
   }
 
   #left-side {
-    width: auto;
-    height: auto;
+    $width: 100px;
+    $height: 80%;
+    width: $width;
+    height: -webkit-fill-available;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-    img {
-      width: 35dvh;
-      height: 50dvh;
+    .color-view-cont {
+      width: $width;
+      height: $height;
       object-fit: cover;
       border-radius: $margin;
+    }
+
+    @media screen and (max-width: 768px) {
+      width: 100%;
+      height: 10dvh;
+      margin-top: 20px;
+
+      .color-view-cont {
+        width: 100%;
+        height: 100%;
+      }
     }
   }
 
   #right-side {
     position: relative;
+    width: -webkit-fill-available;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
 
-    &[use-img="true"] {
-      width: -webkit-fill-available;
-      height: auto;
+    @media screen and (max-width: 768px) {
+      flex-direction: column;
     }
-    &[use-img="false"] {
-      width: 100%;
-      height: auto;
-      display: flex;
-      gap: 40px;
 
+    .select-dropdown {
       @media screen and (max-width: 768px) {
-        flex-direction: column;
+        width: 100%;
       }
     }
 
     h3 {
       margin-block: $margin;
       margin-inline: 0;
+
+      &.first {
+        margin-right: 70px;
+      }
     }
 
     .submit-btn {
@@ -148,6 +178,13 @@
       height: 60px;
       border-radius: 20px;
       margin-block: $margin;
+
+      @media screen and (max-width: 768px) {
+        top: calc(($margin * -5) - 10dvh - 25px);
+        right: 0;
+        width: 40px;
+        height: 40px;
+      }
     }
   }
 }
@@ -159,4 +196,8 @@
   background-color: map-get($map: $project-colors, $key: 'fontColor');
   top: 0;
   left: 50%;
+
+  @media screen and (max-width: 768px) {
+    left: 70%;
+  }
 }

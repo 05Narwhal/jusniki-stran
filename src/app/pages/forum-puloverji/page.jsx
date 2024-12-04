@@ -4,14 +4,14 @@ import { Button } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 
-import { ClassSelect, HoodieSelectBox, InputField, TextContainer, HoodieSelection } from '@/app/components/forum-containers/components';
-import { getTheme } from '@/app/utils/projectColors';
-import { addToFirebase } from '@/app/utils/databaseManager';
-import { getFormattedDateTime } from '@/app/utils/basicFuncs';
+import { ClassSelect, HoodieSelectBox, InputField, TextContainer, HoodieSelection } from '../../components/forum-containers/components';
+import { getTheme } from '../../utils/projectColors';
+import { addToFirebase } from '../../utils/databaseManager';
+import { getFormattedDateTime } from '../../utils/basicFuncs';
 
 import './styles.scss';
 import 'react-toastify/dist/ReactToastify.css';
-import { primaryColor, secondaryColor, fontColor } from "../../styles/variables.module.scss"
+import { primaryColor, secondaryColor, fontColorOpp } from "../../styles/variables.module.scss"
 
 function ForumHoodie() {
   const router = useRouter()
@@ -34,10 +34,11 @@ function ForumHoodie() {
       return 
     } else if (selectedData.length === 0) {
       toast.warn("Zakaj prideš sem in oddaš naročilo brez puloverjev?")
+      return
     }
 
     let name = selectedName
-    let letnik = selectedClass !== "noSKG"? `${selectedClass}.${selectedOddelek}` : "ni na SKG"
+    let letnik = selectedClass !== "noSKG"? selectedClass === 'prof'? "prof" : `${selectedClass}.${selectedOddelek}` : "/"
     let dateOfSubmit = getFormattedDateTime()
     let data = selectedData
 
@@ -85,7 +86,7 @@ function ForumHoodie() {
         className='submit-btn'
         sx={{ 
           backgroundColor: primaryColor,
-          color: fontColor,
+          color: fontColorOpp,
           transition: 'all 0.3s',
           fontWeight: 'bold',
           fontSize: '1.6em',

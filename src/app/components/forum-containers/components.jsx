@@ -3,14 +3,14 @@ import React, {useEffect, useState} from 'react';
 
 import { Checkbox, TextField, FormControlLabel, Button, Select, MenuItem } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faPlus, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 // Ensure the SCSS variables are correctly imported
 import variables from '../../styles/variables.module.scss';
 
 import './_styles.scss';
-import { isMobileDevice } from '@/app/utils/basicFuncs';
-import { defineLightDark, lightenDarkenColor } from '@/app/utils/projectColors';
+import { isMobileDevice } from '../../utils/basicFuncs';
+import { defineLightDark, lightenDarkenColor } from '../../utils/projectColors';
 
 // Use the imported SCSS variables correctly
 const defaultProps = {
@@ -46,6 +46,7 @@ const classOptions = {
   letnik3: ['a', 'b', 'c', 'č', 'd', 'e'],
   letnik4: ['a', 'b', 'c', 'č', 'd'],
   noSKG: ['fa-icon>>', faCheck],
+  prof: ['fa-icon-prof>>', faCheck]
 }
 
 function InputField({ 
@@ -101,7 +102,7 @@ function ClassSelect({ className, valueType, placeholder, contSx, checkboxSx, ti
                 }
                 label={key === 'noSKG' ? 
                   (isMobileDevice()? 'Ne obiskujem ŠKG':'Ne obiskujem Škofijske Klasične Gimnazije'):
-                  key.replace('letnik', '') + '. letnik'
+                  key === 'prof'? 'Profesor' : (key.replace('letnik', '') + '. letnik')
                 }
               />
             );
@@ -116,6 +117,15 @@ function ClassSelect({ className, valueType, placeholder, contSx, checkboxSx, ti
                   <p>Tukaj ni nič za izpolniti 😁</p><br/>
                   <center>
                     <FontAwesomeIcon icon={classOptions['noSKG'][1]} color={variables.bgColorOpp} />
+                  </center>
+                </div>
+              );
+            } else if (option === 'fa-icon-prof>>') {
+              return (
+                <div key={index} className='class-option'>
+                  <p>Tukaj ni nič za izpolniti 😁</p><br/>
+                  <center>
+                    <FontAwesomeIcon icon={classOptions['prof'][1]} color={variables.bgColorOpp} />
                   </center>
                 </div>
               );
@@ -213,39 +223,55 @@ function HoodieSelectBox({ className, data=null, useImg=false, index, onRemove=(
     )
   }
 
-  const [hoodieImg, setHoodieImg] = useState(data.hoodieImages[selectedData.logoType][selectedData.color]);
+  useEffect(() => {
+    setHoodieSelectionColor(data[selectedData['color']]['hex']);
+  }, [onRemove])
+
+  const [hoodieSelectionColor, setHoodieSelectionColor] = useState(data[selectedData['color']]['hex']);
 
   const handleChange = (key, val) => {
     let newItem = selectedData
 
+    console.log(key, val)
+
     if (newItem[key]) {
+      if (key === 'color' && val === 'sky blue') {
+        if (selectedData['size'] === 'S' || selectedData['size'] === 'XS') {
+          newItem['size'] = 'M'
+        } 
+      } 
       newItem[key] = val
     }
 
-    setHoodieImg(data.hoodieImages[newItem.logoType][newItem.color]);
+    let maxStock = data[selectedData['color']]['maxStock'][newItem['size']]
+
+    console.log(newItem, maxStock)
+
+    setHoodieSelectionColor(data[selectedData['color']]['hex']);
     onChangeSelect({
-      size: newItem.size,
-      color: newItem.color,
-      logoType: newItem.logoType,
-      quantity: newItem.quantity
+      color: newItem['color'],
+      size: newItem['size']? newItem['size']: 'M',
+      quantity: newItem['quantity'],
+      maxStock,
     }, index)
   }
 
   return (
     <div className={`main-cont-hoodie-select ${className}`}>
-      {useImg && <div id='left-side'>
-        <img src={hoodieImg} alt="" />
-      </div>}
+      <div id='left-side'>
+        <div className='color-view-cont' style={{ backgroundColor: hoodieSelectionColor }}/>
+      </div>
       <div id='right-side' use-img={useImg? "true": "false"}>
         <div>
-          <h3>Izberi si velikost puloverja</h3>
+          <h3 className='first' >Izberi si velikost puloverja</h3>
           <Select
             value={selectedData.size}
             onChange={(e) => handleChange("size", e.target.value)}
             sx={{ ...defaultDropdownSX }}
             MenuProps={menuProps}
+            className="select-dropdown"
           >
-            {data.hoodieSizes.map((size, index) => (
+            {data[selectedData.color]['sizes'].map((size, index) => (
               <MenuItem 
                 key={index} 
                 value={size} 
@@ -264,8 +290,9 @@ function HoodieSelectBox({ className, data=null, useImg=false, index, onRemove=(
             onChange={(e) => handleChange("color", e.target.value)}
             sx={{ ...defaultDropdownSX }}
             MenuProps={menuProps}
+            className="select-dropdown"
           >
-            {data.hoodieColors.map((color, index) => (
+            {Object.keys(data).map((color, index) => (
               <MenuItem 
                 key={index} 
                 value={color} 
@@ -277,7 +304,7 @@ function HoodieSelectBox({ className, data=null, useImg=false, index, onRemove=(
           </Select>
         </div>
 
-        <div>
+        {/* <div>
           <h3>Izberi si logotip puloverja</h3>
           <Select
             value={selectedData.logoType}
@@ -295,7 +322,7 @@ function HoodieSelectBox({ className, data=null, useImg=false, index, onRemove=(
               </MenuItem>
             ))}
           </Select>
-        </div>
+        </div> */}
 
         <div>
           <h3>Izberi si količino puloverjev</h3>
@@ -304,8 +331,9 @@ function HoodieSelectBox({ className, data=null, useImg=false, index, onRemove=(
             onChange={(e) => handleChange("quantity", e.target.value)}
             sx={{ ...defaultDropdownSX }}
             MenuProps={menuProps}
+            className="select-dropdown"
           >
-            {data.hoodieQuantities.map((number, index) => (
+            {data[selectedData.color]['maxStock']['selection'].map((number, index) => (
               <MenuItem 
                 key={index} 
                 value={number} 
@@ -370,77 +398,152 @@ function HoodieSelectBox({ className, data=null, useImg=false, index, onRemove=(
   );
 }
 
-function HoodieSelection({ className, useImg=false, onChange=()=>{} }) {
+// // * types for hoodie selection
+// interface HoodieSelection {
+//   'candyfloss': HoodieSelectionPart,
+//   'dusty purple': HoodieSelectionPart,
+//   'fuchsia': HoodieSelectionPart,
+//   'sky blue': HoodieSelectionPart,
+//   'hawaii blue': HoodieSelectionPart,
+//   'tropical blue': HoodieSelectionPart,
+//   'light royal blue': HoodieSelectionPart,
+// }
+
+// interface HoodieSelectionPart {
+//   'hex': string,
+//   'sizes': string[],
+//   'maxStock': {
+//     'XS'?: number,
+//     'S'?: number,
+//     'M'?: number,
+//     'L'?: number,
+//     'XL'?: number,
+//     'XXL'?: number,
+//     '3XL'?: number,
+//     '4XL'?: number,
+//     'selection': number[]
+//   }
+// }
+
+function HoodieSelection({ className, useImg=true, onChange=()=>{} }) {
   const [selectedData, setSelectedData] = useState([]);
 
   useEffect(()=>{
     onChange(selectedData)
   }, [selectedData])
 
-  const defaultData = {
-    hoodieColors: [
-      'black', 
-      'white', 
-      'grey', 
-      'blue', 
-      'green', 
-      'red', 
-      'yellow', 
-      'purple', 
-      'pink',
-    ],
-    hoodieLogos: [
-      'og', 
-      'logo1',
-      'logo2'
-    ],
-    hoodieImages: {
-      og: {
-        black : "https://uniformtailor.in/image/cache/catalog/data/Sweatshirts/hoodie/personalized-black-hoodie/personalized-black-hoodie-with-company-logo-670x760.jpg",
-        white : "https://officialbrand.eu/imrankhanworld/wp-content/uploads/sites/4/2018/03/hoodie-white.png",
-        grey  : "",
-        blue  : "",
-        green : "",
-        red   : "",
-        yellow: "",
-        purple: "",
-        pink  : ""
-      },
-      logo1: {
-        black : "https://shopthestandard.com/cdn/shop/products/big_hoodie.jpg?v=1583621812",
-        white : "https://shop.hardrock.com/dw/image/v2/BJKF_PRD/on/demandware.static/-/Sites-hardrock-master/default/dw94f7f69c/images/large/0886676308684_4.jpg?sw=800&sh=800",
-        grey  : "",
-        blue  : "",
-        green : "",
-        red   : "",
-        yellow: "",
-        purple: "",
-        pink  : ""
-      },
-      logo2: {
-        black : "https://static.wixstatic.com/media/c02b09_70cab98e47a54edeb0b60efae2ae57cc~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
-        white : "https://www.aviatornation.com/cdn/shop/files/logo-pullover-relaxed-hoodie-white-hoodie-aviator-nation-610338.jpg?v=1716319796",
-        grey  : "",
-        blue  : "",
-        green : "",
-        red   : "",
-        yellow: "",
-        purple: "",
-        pink  : ""
+  const hoodieSelections = {
+    'candyfloss': {
+      'hex': '#f4b8d8',
+      'sizes': ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL', '4XL'],
+      'maxStock': {
+        'XS':  1  + 84,
+        'S':   7  + 299,
+        'M':   20 + 629,
+        'L':   3  + 767,
+        'XL':  12 + 500,
+        'XXL': 18 + 187,
+        '3XL': 4  + 58,
+        '4XL': 4  + 24,
+        'selection' : Array.from({length: 10}, (_, i) => i + 1)
       }
-    },
-    hoodieSizes: [
-      'XS', 'S', 'M', 'L', 'XL', 'XXL'
-    ],
-    hoodieQuantities: [
-      1, 2, 3, 4, 5, 6, 7, 8, 9, 10
-    ]
-  }
+    }, 
+    'dusty purple': {
+      'hex': '#825F87',
+      'sizes': ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL', '4XL'],
+      'maxStock': {
+        'XS':  8  + 12,
+        'S':   13 + 119,
+        'M':   8  + 338,
+        'L':   23 + 312,
+        'XL':  1  + 242,
+        'XXL': 15 + 159,
+        '3XL': 4  + 68,
+        '4XL': 2  + 39,
+        'selection' : Array.from({length: 10}, (_, i) => i + 1)
+      }
+    }, 
+    'fuchsia': {
+      'hex': '#FF00FF',
+      'sizes': ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL', '4XL'],
+      'maxStock': {
+        'XS':  2  + 0,
+        'S':   14 + 0,
+        'M':   16 + 0,
+        'L':   17 + 123,
+        'XL':  5  + 145,
+        'XXL': 16 + 35,
+        '3XL': 3  + 67,
+        '4XL': 3  + 128,
+        'selection' : Array.from({length: 10}, (_, i) => i + 1)
+      }
+    }, 
+    'sky blue': {
+      'hex': '#87CEEB',
+      'sizes': ['M', 'L', 'XL', 'XXL', '3XL', '4XL'],
+      'maxStock': {
+        'M':   7  + 0,
+        'L':   13 + 0,
+        'XL':  5  + 0,
+        'XXL': 9  + 87,
+        '3XL': 5  + 40,
+        '4XL': 5  + 116,
+        'selection' : Array.from({length: 10}, (_, i) => i + 1)
+      }
+    }, 
+    'hawaii blue': {
+      'hex': '#00c3e3',
+      'sizes': ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL', '4XL'],
+      'maxStock': {
+        'XS':  3  + 48,
+        'S':   9  + 210,
+        'M':   3  + 469,
+        'L':   10 + 514,
+        'XL':  9  + 368,
+        'XXL': 20 + 155,
+        '3XL': 4  + 67,
+        '4XL': 3  + 49,
+        'selection' : Array.from({length: 10}, (_, i) => i + 1)
+      }
+    }, 
+    'tropical blue': {
+      'hex': '#C3DDF9',
+      'sizes': ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL', '4XL'],
+      'maxStock': {
+        'XS':  0  + 24,
+        'S':   17 + 269,
+        'M':   0  + 471,
+        'L':   4  + 447,
+        'XL':  8  + 214,
+        'XXL': 12 + 77,
+        '3XL': 3  + 53,
+        '4XL': 5  + 113,
+        'selection' : Array.from({length: 10}, (_, i) => i + 1)
+      }
+    }, 
+    'light royal blue' : {
+      'hex': '#3A2EFE',
+      'sizes': ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL', '4XL'],
+      'maxStock': {
+        'XS':  5  + 0,
+        'S':   5  + 11,
+        'M':   17 + 459,
+        'L':   20 + 778,
+        'XL':  18 + 549,
+        'XXL': 7  + 159,
+        '3XL': 4  + 74,
+        '4XL': 3  + 91,
+        'selection' : Array.from({length: 10}, (_, i) => i + 1)
+      }
+    }
+  };
+
   const defaultHoodieSelect = {
-    size: "XS",
-    color: "black",
-    logoType: "og",
-    quantity: 1
+    size: 'M',
+    color: 'candyfloss',
+    hex: hoodieSelections['candyfloss']['hex'],
+    quantity: 1,
+    maxStock: hoodieSelections['candyfloss']['maxStock']['XS'],
   }
 
   return(
@@ -461,7 +564,7 @@ function HoodieSelection({ className, useImg=false, onChange=()=>{} }) {
             setSelectedData(newList)
           }}
           index={index}
-          data={defaultData}
+          data={hoodieSelections}
           onRemove={(index) => {
             let newList = []
 
@@ -475,11 +578,13 @@ function HoodieSelection({ className, useImg=false, onChange=()=>{} }) {
           }}
         />
       )}
-      <FontAwesomeIcon 
-        icon={faPlusCircle} 
-        className='plus-icon' 
-        onClick={() => setSelectedData([...selectedData, defaultHoodieSelect])}
-      />
+      <div className='plus-icon-div' onClick={() => setSelectedData([...selectedData, defaultHoodieSelect])}>
+        <FontAwesomeIcon 
+          icon={faPlus} 
+          className='plus-icon' 
+        />
+        <p>nov pulover</p>
+      </div>
     </>
   )
 }

@@ -1,7 +1,21 @@
+@use '../../styles/mixins.scss' as *;
+@use '../../styles/variables.module.scss' as *;
+@use "sass:map";
+@use "sass:color";
+
 .main-stats-cont {
+  $bgColor: map-get($map: $project-colors, $key: 'bgColor');
+  $fontColor: map-get($map: $project-colors, $key: 'fontColor');
+  $fontColorOpp: map-get($map: $project-colors, $key: 'fontColorOpp');
+  $bgAccent: map-get($map: $project-colors, $key: 'bgAccent');
+  $primaryColor: map-get($map: $project-colors, $key: 'primaryColor');
+  $secondaryColor: map-get($map: $project-colors, $key: 'secondaryColor');
+
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 1fr 400px;
+  height: 100dvh;
   gap: 20px;
+  background-color: $bgColor;
 
   table {
     width: 100%;
@@ -16,9 +30,9 @@
     }
   
     th {
-      background-color: #7a7a7a;
+      background-color: $secondaryColor;
       font-weight: bold;
-      color: #333;
+      color: $fontColor;
     }
   
     tr:nth-child(even) {
@@ -26,7 +40,9 @@
     }
   
     tr:hover {
-      background-color: #4a4a4a;
+      background-color: $primaryColor;
+      opacity: 80%;
+      color: $fontColorOpp;
     }
   }
   
@@ -46,13 +62,28 @@
     margin: 0 5px;
     border: 1px solid #ddd;
     border-radius: 4px;
-    background-color: #007bff;
-    color: #fff;
+    background-color: $primaryColor;
+    color: $fontColor;
     cursor: pointer;
+    transition: all .3s;
   }
   
   button:disabled {
     background-color: #6c6c6c;
     cursor: not-allowed;
   }  
+
+  .chart-btn:hover {
+    transform: scale(1.1);
+  }
+
+  .chart-btn-disabled {
+    background-color: #6c6c6c;
+  }
+
+  .graph-div {
+    margin: 10px;
+    width: stretch;
+    // background-color: #007bff;
+  }
 }

@@ -1,7 +1,13 @@
+"use client"
 export const isMobileDevice = () => {
-  const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+  let userAgent 
+  if (typeof window !== 'undefined') {
+    userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+    return /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent.toLowerCase());
+  }
   
-  return /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent.toLowerCase());
+  return false;
 }
 
 export function getFormattedDateTime() {
@@ -19,4 +25,30 @@ export function getFormattedDateTime() {
 
   // Format the string
   return `${day}/${month}/${year}-${hours}:${minutes}:${seconds}`;
+}
+
+export function deepCopy(input) {
+  if (Array.isArray(input)) {
+    // Deep copy each element of the array
+    return input.map(item => deepCopy(item));
+  } else if (input && typeof input === 'object') {
+    // Deep copy each key-value pair in the object
+    const copy = {};
+    for (const key in input) {
+      if (Object.prototype.hasOwnProperty.call(input, key)) {
+        copy[key] = deepCopy(input[key]);
+      }
+    }
+    return copy;
+  }
+  // Primitive values (number, string, etc.) are returned as-is
+  return input;
+}
+
+export function sum(list) {
+  let count = 0
+  for (let item of list) {
+    count += parseInt(item)
+  }
+  return count
 }

@@ -13,15 +13,48 @@ main {
   justify-content: flex-start;
 }
 
-.plus-icon {
-  font-size: 60px;
-  color: map-get($map: $project-colors, $key: 'primaryColor');
+// .plus-icon {
+//   font-size: 60px;
+//   color: map-get($map: $project-colors, $key: 'primaryColor');
+//   transition: all 0.3s;
+//   margin: 20px;
+//   margin-bottom: 60px;
+
+//   &:hover {
+//     cursor: pointer;
+//     transform: scale(1.2);
+//   }
+// }
+
+.plus-icon-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   transition: all 0.3s;
   margin: 20px;
   margin-bottom: 60px;
+  background-color: map-get($map: $project-colors, $key: 'primaryColor');
+  border-radius: 20px;
+  user-select: none;
 
-  &:hover {
-    cursor: pointer;
-    transform: scale(1.2);
+  &>svg {
+    color: map-get($map: $project-colors, $key: 'fontColorOpp');
+    font-size: 40px;
+    margin: 15px;
+  }
+
+  &>p {
+    margin: 0;
+    font-size: 40px;
+    margin-inline: 20px;
+    color: map-get($map: $project-colors, $key: 'fontColorOpp');
+  }
+
+  @media screen and not (max-width: 768px) {
+    &:hover {
+      cursor: pointer;
+      transform: scale(1.2);
+      background-color: map-get($map: $project-colors, $key: 'secondaryColor');
+    } 
   }
 }

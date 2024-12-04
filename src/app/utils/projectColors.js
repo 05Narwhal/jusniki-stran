@@ -1,3 +1,4 @@
+"use client"
 import { primaryColor, secondaryColor, accentColor, bgColor, bgAccent } from '../styles/variables.module.scss';
 
 function setOpacity(color, opacity) {
@@ -107,21 +108,25 @@ function getColorType(color) {
 
 // get the light or dark theme setting on device
 function getTheme() {
-  let theme = 'light';
-  if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    theme = 'dark';
+  // Check if we're in a browser environment
+  if (typeof window !== 'undefined') {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   }
-  return theme;
+  
+  // Default to light theme during server-side rendering
+  return 'light';
 }
 
 function defineLightDark(lightDark) {
   let [light, dark] = lightDark.trim().replace('light-dark(', '').replace(')', '').replace(' ', '').split(',');
   
-  if (getTheme() === 'light') {
-    return light;
-  } else {
-    return dark;
+  // Use a client-side check for theme
+  if (typeof window !== 'undefined') {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? dark : light;
   }
+  
+  // Default to light theme during server-side rendering
+  return light;
 }
 
 export { 
@@ -138,6 +143,6 @@ export {
   getContrast,
   setOpacity,
   getColorType,
-  getTheme,
-  defineLightDark
+  defineLightDark,
+  getTheme 
 };
