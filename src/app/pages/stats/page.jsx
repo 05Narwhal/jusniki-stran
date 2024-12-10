@@ -175,13 +175,13 @@ const columns = [
     enableSorting: true,
     sortingFn: customSorters.size
   },
-  {
-    id: 'maxStock',
-    header: "max Stock"+" ".repeat(10),
-    accessorKey: "maxStock",
-    enableSorting: true,
-    sortingFn: customSorters.quantitative
-  }
+  // {
+  //   id: 'maxStock',
+  //   header: "max Stock"+" ".repeat(10),
+  //   accessorKey: "maxStock",
+  //   enableSorting: true,
+  //   sortingFn: customSorters.quantitative
+  // }
 ];
 
 function DataTable({ data, columns, selectedColumn=()=>{} }) {

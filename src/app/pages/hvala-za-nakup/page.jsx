@@ -1,5 +1,4 @@
-
-
+"use client"
 export default function View() {
   return (
     <div style={{
@@ -10,7 +9,20 @@ export default function View() {
       alignItems: 'center',
       textAlign: 'center'
     }}>
-      <h1 style={{ fontSize: '100px' }}>
+      <style>
+        {`
+          h1 {
+            font-size: 4rem;
+          }
+
+          @media screen and (max-width: 768px) {
+            h1 {
+              font-size: 2rem;
+            }
+          }
+        `}
+      </style>
+      <h1>
         Hvala za vaš nakup ŠKG puloverjev! :D
       </h1>
     </div>

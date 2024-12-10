@@ -3,14 +3,16 @@ import React, {useEffect, useState} from 'react';
 
 import { Checkbox, TextField, FormControlLabel, Button, Select, MenuItem } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faPlus, faPlusCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 // Ensure the SCSS variables are correctly imported
 import variables from '../../styles/variables.module.scss';
+import skgLogo from '../../../../public/logo_skg.png';
 
 import './_styles.scss';
 import { isMobileDevice } from '../../utils/basicFuncs';
 import { defineLightDark, lightenDarkenColor } from '../../utils/projectColors';
+import Image from 'next/image';
 
 // Use the imported SCSS variables correctly
 const defaultProps = {
@@ -259,7 +261,9 @@ function HoodieSelectBox({ className, data=null, useImg=false, index, onRemove=(
   return (
     <div className={`main-cont-hoodie-select ${className}`}>
       <div id='left-side'>
-        <div className='color-view-cont' style={{ backgroundColor: hoodieSelectionColor }}/>
+        <div className='color-view-cont hoodie-logo' style={{ backgroundColor: hoodieSelectionColor }}>
+          <img src={skgLogo} alt='logo' className='hoodie-logo'/>
+        </div>
       </div>
       <div id='right-side' use-img={useImg? "true": "false"}>
         <div>
@@ -433,117 +437,74 @@ function HoodieSelection({ className, useImg=true, onChange=()=>{} }) {
   }, [selectedData])
 
   const hoodieSelections = {
-    'candyfloss': {
-      'hex': '#f4b8d8',
-      'sizes': ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL', '4XL'],
+    'črna': {
+      'hex': '#000',
+      'sizes': ['XS', 'S', 'M', 'L', 'XL'],
       'maxStock': {
-        'XS':  1  + 84,
-        'S':   7  + 299,
-        'M':   20 + 629,
-        'L':   3  + 767,
-        'XL':  12 + 500,
-        'XXL': 18 + 187,
-        '3XL': 4  + 58,
-        '4XL': 4  + 24,
+        'XS':  8  + 706,
+        'S':   0  + 1290,
+        'M':   0  + 2027,
+        'L':   0  + 4217,
+        'XL':  14 + 4731,
         'selection' : Array.from({length: 10}, (_, i) => i + 1)
       }
     }, 
-    'dusty purple': {
+    'temno zelena': {
+      'hex': '#006A4E',
+      'sizes': ['XS', 'S', 'M', 'L', 'XL'],
+      'maxStock': {
+        'XS':  1  + 59,
+        'S':   1  + 267,
+        'M':   12 + 298,
+        'L':   20 + 352,
+        'XL':  12 + 436,
+        'selection' : Array.from({length: 10}, (_, i) => i + 1)
+      }
+    }, 
+    'roza-vijolična': {
       'hex': '#825F87',
-      'sizes': ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL', '4XL'],
+      'sizes': ['XS', 'S', 'M', 'L', 'XL'],
       'maxStock': {
         'XS':  8  + 12,
         'S':   13 + 119,
         'M':   8  + 338,
         'L':   23 + 312,
         'XL':  1  + 242,
-        'XXL': 15 + 159,
-        '3XL': 4  + 68,
-        '4XL': 2  + 39,
         'selection' : Array.from({length: 10}, (_, i) => i + 1)
       }
     }, 
-    'fuchsia': {
-      'hex': '#FF00FF',
-      'sizes': ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL', '4XL'],
-      'maxStock': {
-        'XS':  2  + 0,
-        'S':   14 + 0,
-        'M':   16 + 0,
-        'L':   17 + 123,
-        'XL':  5  + 145,
-        'XXL': 16 + 35,
-        '3XL': 3  + 67,
-        '4XL': 3  + 128,
-        'selection' : Array.from({length: 10}, (_, i) => i + 1)
-      }
-    }, 
-    'sky blue': {
-      'hex': '#87CEEB',
-      'sizes': ['M', 'L', 'XL', 'XXL', '3XL', '4XL'],
-      'maxStock': {
-        'M':   7  + 0,
-        'L':   13 + 0,
-        'XL':  5  + 0,
-        'XXL': 9  + 87,
-        '3XL': 5  + 40,
-        '4XL': 5  + 116,
-        'selection' : Array.from({length: 10}, (_, i) => i + 1)
-      }
-    }, 
-    'hawaii blue': {
+    'modra': {
       'hex': '#00c3e3',
-      'sizes': ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL', '4XL'],
+      'sizes': ['XS', 'S', 'M', 'L', 'XL'],
       'maxStock': {
         'XS':  3  + 48,
         'S':   9  + 210,
         'M':   3  + 469,
         'L':   10 + 514,
         'XL':  9  + 368,
-        'XXL': 20 + 155,
-        '3XL': 4  + 67,
-        '4XL': 3  + 49,
+        'selection' : Array.from({length: 10}, (_, i) => i + 1)
+      }
+    },  
+    'temno rdeča': {
+      'hex': '#800020',
+      'sizes': ['XS','S', 'M', 'L', 'XL'],
+      'maxStock': {
+        'XS':  0  + 0,
+        'S':   0  + 0,
+        'M':   7  + 0,
+        'L':   13 + 0,
+        'XL':  5  + 0,
         'selection' : Array.from({length: 10}, (_, i) => i + 1)
       }
     }, 
-    'tropical blue': {
-      'hex': '#C3DDF9',
-      'sizes': ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL', '4XL'],
-      'maxStock': {
-        'XS':  0  + 24,
-        'S':   17 + 269,
-        'M':   0  + 471,
-        'L':   4  + 447,
-        'XL':  8  + 214,
-        'XXL': 12 + 77,
-        '3XL': 3  + 53,
-        '4XL': 5  + 113,
-        'selection' : Array.from({length: 10}, (_, i) => i + 1)
-      }
-    }, 
-    'light royal blue' : {
-      'hex': '#3A2EFE',
-      'sizes': ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL', '4XL'],
-      'maxStock': {
-        'XS':  5  + 0,
-        'S':   5  + 11,
-        'M':   17 + 459,
-        'L':   20 + 778,
-        'XL':  18 + 549,
-        'XXL': 7  + 159,
-        '3XL': 4  + 74,
-        '4XL': 3  + 91,
-        'selection' : Array.from({length: 10}, (_, i) => i + 1)
-      }
-    }
   };
 
   const defaultHoodieSelect = {
     size: 'M',
-    color: 'candyfloss',
-    hex: hoodieSelections['candyfloss']['hex'],
+    color: 'črna',
+    hex: hoodieSelections['črna']['hex'],
     quantity: 1,
-    maxStock: hoodieSelections['candyfloss']['maxStock']['XS'],
+    maxStock: hoodieSelections['črna']['maxStock']['XS'],
   }
 
   return(
@@ -595,4 +556,4 @@ export {
   TextContainer,
   HoodieSelectBox,
   HoodieSelection
-}
+};
